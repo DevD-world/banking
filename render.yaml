@@ -9,6 +9,6 @@ services:
       - key: HOST
         value: 0.0.0.0
       - key: COMPLETION_IQ_DATA_DIR
-        value: /var/data
+        value: /tmp/completion-iq
       - key: COMPLETION_IQ_ALLOWED_ORIGIN
         value: "*"
