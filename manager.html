@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Completion IQ Manager Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      body { background:#f6f7f4; }
+      .manager-shell { max-width:1180px; margin:0 auto; padding:28px; }
+      .manager-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+      .manager-card { background:white; border:1px solid #dfe4df; border-radius:8px; padding:16px; }
+      .wide { grid-column:span 2; }
+      .full { grid-column:1 / -1; }
+      .row { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid #edf1ee; }
+      .row:first-child { border-top:0; }
+      .pill { padding:4px 8px; border-radius:999px; background:#e4f3ee; font-weight:800; }
+      @media (max-width:800px){ .manager-grid{grid-template-columns:1fr;} .wide{grid-column:auto;} }
+    </style>
+  </head>
+  <body>
+    <main class="manager-shell">
+      <h1>Completion IQ Manager Dashboard</h1>
+      <p>Branch bottlenecks, SLA risk, revenue leakage, RM productivity, and root-cause intelligence.</p>
+      <div id="managerDashboard" class="manager-grid"></div>
+    </main>
+    <script src="./config.js?v=20260610-netlify"></script>
+    <script>
+      const apiUrl = window.completionIqApiUrl || ((path) => path);
+      const money = (value) => new Intl.NumberFormat("en-IN", { style:"currency", currency:"INR", maximumFractionDigits:0 }).format(value || 0);
+      async function loadDashboard() {
+        const [state, analytics, compliance] = await Promise.all([
+          fetch(apiUrl("/api/state")).then((r) => r.json()),
+          fetch(apiUrl("/api/analytics")).then((r) => r.json()),
+          fetch(apiUrl("/api/compliance")).then((r) => r.json())
+        ]);
+        document.getElementById("managerDashboard").innerHTML = `
+          <section class="manager-card"><span>Revenue at Risk</span><h2>${money(analytics.revenueAtRisk)}</h2></section>
+          <section class="manager-card"><span>At-Risk Apps</span><h2>${analytics.atRiskApplications}</h2></section>
+          <section class="manager-card"><span>Review Queue</span><h2>${state.reviewQueue.length}</h2></section>
+          <section class="manager-card"><span>Compliance Events</span><h2>${compliance.audit.length + compliance.integrations.length}</h2></section>
+          <section class="manager-card wide"><h2>Branch Heatmap</h2>${analytics.branchHeatmap.map((r) => `<div class="row"><span>${r.branch}<br><small>${r.bottleneck}</small></span><b>${r.atRisk} risk</b></div>`).join("")}</section>
+          <section class="manager-card wide"><h2>Root Causes</h2>${analytics.rootCauses.map((r) => `<div class="row"><span>${r.reason}</span><b>${r.share}%</b></div>`).join("")}</section>
+          <section class="manager-card wide"><h2>RM Productivity</h2>${analytics.rmProductivity.map((r) => `<div class="row"><span>${r.rm}<br><small>${r.openTasks} open tasks</small></span><b>${r.avgCompletion}%</b></div>`).join("")}</section>
+          <section class="manager-card wide"><h2>SLA Tracker</h2>${analytics.sla.slice(0,8).map((r) => `<div class="row"><span>${r.customer}<br><small>${r.stage}, ${r.idleDays} idle days</small></span><b>${r.status}</b></div>`).join("")}</section>
+          <section class="manager-card full"><h2>Customer Completion Risk</h2>${analytics.customerRisk.slice(0,10).map((r) => `<div class="row"><span>${r.customer}<br><small>${r.reason}</small></span><span class="pill">${r.completionLikelihood}% likely</span></div>`).join("")}</section>
+        `;
+      }
+      loadDashboard();
+    </script>
+  </body>
+</html>

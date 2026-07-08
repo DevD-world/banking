@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Document Upload</title>
+    <link rel="stylesheet" href="./mobile.css" />
+  </head>
+  <body>
+    <main class="mobile-app">
+      <header class="mobile-header">
+        <div>
+          <span class="eyebrow">Completion IQ</span>
+          <h1>Track & Upload</h1>
+        </div>
+        <span id="portalStatus" class="status-pill">Loading</span>
+      </header>
+      <section class="detail-block">
+        <h2 id="portalCustomer">Application</h2>
+        <p id="portalMissing">Checking pending documents...</p>
+        <label class="field">
+          Document type
+          <select id="portalDoc"></select>
+        </label>
+        <label class="mobile-upload" for="portalFile">
+          <input id="portalFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,image/*" />
+          <strong>Choose document</strong>
+          <span id="portalFileName">No file selected</span>
+        </label>
+        <label class="field">
+          Visible text
+          <textarea id="portalText" rows="6" placeholder="Paste visible text if camera OCR is not readable"></textarea>
+        </label>
+        <button id="portalUpload" class="primary-btn">Upload Document</button>
+        <div id="portalResult" class="mobile-result">No upload yet.</div>
+      </section>
+    </main>
+    <script src="./config.js?v=20260610-netlify"></script>
+    <script>
+      const apiUrl = window.completionIqApiUrl || ((path) => path);
+      const params = new URLSearchParams(location.search);
+      const token = params.get("token") || "";
+      const ticket = params.get("ticket") || "";
+      const statusNode = document.getElementById("portalStatus");
+      const fileNode = document.getElementById("portalFile");
+      const resultNode = document.getElementById("portalResult");
+      const maxUploadBytes = 4 * 1024 * 1024;
+      function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result || ""));
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+      async function loadPortal() {
+        const endpoint = ticket ? `/api/tickets/${encodeURIComponent(ticket)}` : `/api/customer-links/${token}`;
+        const response = await fetch(apiUrl(endpoint));
+        const payload = await response.json();
+        if (!payload.ok) {
+          statusNode.textContent = "Invalid";
+          resultNode.textContent = payload.error || "Tracking link is not valid.";
+          return;
+        }
+        statusNode.textContent = "Ready";
+        document.querySelector("h1").textContent = ticket && !token ? "Track Application" : "Upload Missing Documents";
+        document.getElementById("portalCustomer").textContent = payload.application.customer;
+        document.getElementById("portalMissing").textContent = `Ticket ${payload.application.ticket || ticket} • ${payload.application.stage} • ${payload.application.submissionStatus || "Draft"} • Pending: ${payload.application.missing.join(", ") || "No mandatory documents pending"}`;
+        document.getElementById("portalDoc").innerHTML = payload.application.missing.map((doc) => `<option>${doc}</option>`).join("") || "<option>No pending documents</option>";
+        resultNode.innerHTML = `
+          <strong>${payload.application.product}</strong>
+          <span>Completion: ${payload.application.completion || 0}%</span>
+          <span>Next action: ${payload.application.nextAction || "Bank review in progress"}</span>
+          <span>CRM Ref: ${payload.application.crmReference || "Not submitted yet"}</span>
+        `;
+        if ((ticket && !token) || !payload.application.missing.length) {
+          document.getElementById("portalUpload").disabled = true;
+          document.getElementById("portalUpload").textContent = ticket && !token ? "Upload link required" : "No upload required";
+        }
+      }
+      fileNode.addEventListener("change", () => {
+        document.getElementById("portalFileName").textContent = fileNode.files[0]?.name || "No file selected";
+      });
+      document.getElementById("portalUpload").addEventListener("click", async () => {
+        const file = fileNode.files[0];
+        const text = document.getElementById("portalText").value;
+        if (file && file.size > maxUploadBytes) {
+          resultNode.innerHTML = `<strong>File too large</strong><span>${file.name} is ${(file.size / 1024 / 1024).toFixed(1)} MB. Maximum supported upload is 4 MB per document.</span>`;
+          return;
+        }
+        if (!file && !text.trim()) {
+          resultNode.innerHTML = "<strong>No document selected</strong><span>Please choose a file or paste visible text.</span>";
+          return;
+        }
+        resultNode.innerHTML = "<strong>Uploading...</strong><span>Validating your document.</span>";
+        const fileData = file ? await readFileAsDataUrl(file) : "";
+        const response = await fetch(apiUrl("/api/customer-upload"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, expectedDoc: document.getElementById("portalDoc").value, filename: file?.name || "customer upload", text, fileData })
+        });
+        const payload = await response.json();
+        resultNode.innerHTML = payload.ok
+          ? `<strong>${payload.docType} ${payload.result}</strong><span>${payload.ai?.message || "Document received."}</span>`
+          : `<strong>Upload failed</strong><span>${payload.error || "Please retry."}</span>`;
+      });
+      loadPortal();
+    </script>
+  </body>
+</html>

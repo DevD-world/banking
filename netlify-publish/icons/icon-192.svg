@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="40" fill="#111b18"/>
+  <rect x="34" y="34" width="124" height="124" rx="24" fill="#9ff0ce"/>
+  <text x="96" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="800" fill="#062219">CI</text>
+  <path d="M55 132h82" stroke="#062219" stroke-width="10" stroke-linecap="round"/>
+</svg>

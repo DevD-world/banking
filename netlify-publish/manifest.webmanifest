@@ -1,0 +1,18 @@
+{
+  "name": "Completion IQ Mobile",
+  "short_name": "Completion IQ",
+  "description": "Mobile RM workspace for application completion, document scanning, and follow-ups.",
+  "start_url": "./mobile.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f7f4",
+  "theme_color": "#0e503d",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

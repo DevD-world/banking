@@ -1,0 +1,20 @@
+[build]
+  command = "node scripts/build-netlify.mjs"
+  publish = "netlify-publish"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api-proxy/:splat"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-store, max-age=0"
+
+[[headers]]
+  for = "/mobile.js"
+  [headers.values]
+    Cache-Control = "no-store, max-age=0"

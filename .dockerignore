@@ -1,0 +1,10 @@
+backend/__pycache__/
+backend/uploads/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+.venv/
+venv/
+node_modules/

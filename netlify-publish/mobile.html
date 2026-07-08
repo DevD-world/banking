@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e503d" />
+    <title>Completion IQ Mobile</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./mobile.css" />
+  </head>
+  <body>
+    <main class="mobile-app">
+      <header class="mobile-header">
+        <div>
+          <span class="eyebrow">Completion IQ</span>
+          <h1 id="mobileTitle">RM Workspace</h1>
+        </div>
+        <span id="syncBadge" class="status-pill">Syncing</span>
+      </header>
+
+      <section id="screen-home" class="screen active">
+        <section class="detail-block compact">
+          <h2>Demo Controls</h2>
+          <label class="field">
+            Role
+            <select id="roleSelect">
+              <option value="rm">RM</option>
+              <option value="manager">Manager</option>
+              <option value="admin">Admin</option>
+              <option value="customer">Customer</option>
+            </select>
+          </label>
+          <div class="quick-actions">
+            <button id="pitchModeBtn" class="mini-btn" type="button">Pitch Mode</button>
+            <button id="resetDemoBtn" class="mini-btn danger-btn" type="button">Reset Demo</button>
+          </div>
+        </section>
+        <div class="metric-strip" id="mobileMetrics"></div>
+        <div id="roleHomePanel"></div>
+        <div id="mobileNotifications"></div>
+        <button id="newApplicantBtn" class="primary-btn add-applicant-btn" type="button">+ Add New Applicant</button>
+        <label class="search-box">
+          <input id="mobileSearch" type="search" placeholder="Search applicant, product, RM..." />
+        </label>
+        <div id="mobileApplicationList" class="mobile-list"></div>
+      </section>
+
+      <section id="screen-new" class="screen">
+        <button class="text-btn" data-back-home>&lt; Back to applicants</button>
+        <div class="section-head">
+          <h2>New Applicant</h2>
+          <p>Create an application and start collecting documents.</p>
+        </div>
+        <form id="mobileApplicantForm" class="detail-block">
+          <label class="field">
+            Applicant name
+            <input name="customer" required placeholder="Customer / Business name" />
+          </label>
+          <label class="field">
+            Mobile
+            <input name="mobile" required placeholder="+91 90000 00000" />
+          </label>
+          <label class="field">
+            Email
+            <input name="email" type="email" required placeholder="customer@example.com" />
+          </label>
+          <label class="field">
+            Product
+            <select name="product">
+              <option>Savings Account</option>
+              <option>Current Account</option>
+              <option>Business Loan</option>
+              <option>Home Loan</option>
+            </select>
+          </label>
+          <label class="field">
+            Customer segment
+            <select name="customerSegment">
+              <option>Personal</option>
+              <option>Business</option>
+            </select>
+          </label>
+          <label class="field">
+            Application type
+            <select name="accountType">
+              <option>Account Opening</option>
+              <option>Loan</option>
+            </select>
+          </label>
+          <div id="newRequiredDocs" class="mobile-result compact-result">Required documents will appear after product selection.</div>
+          <label class="field">
+            Relationship manager
+            <input name="rm" required value="Asha Nair" />
+          </label>
+          <label class="field">
+            Branch
+            <input name="branch" required value="Chennai Central" />
+          </label>
+          <label class="field">
+            Estimated value
+            <input name="value" type="number" required value="500000" />
+          </label>
+          <label class="field">
+            Customer intent
+            <select name="customerIntent">
+              <option>Hot</option>
+              <option selected>Warm</option>
+              <option>Cold</option>
+            </select>
+          </label>
+          <button class="primary-btn" type="submit">Create Applicant</button>
+        </form>
+      </section>
+
+      <section id="screen-detail" class="screen">
+        <button class="text-btn" data-back-home>&lt; Back to applicants</button>
+        <div id="mobileApplicationDetail"></div>
+      </section>
+
+      <section id="screen-edit" class="screen">
+        <button class="text-btn" data-back-home>&lt; Back to applicants</button>
+        <div class="section-head">
+          <h2>Edit Applicant</h2>
+          <p>Update applicant data, ownership, product, and workflow status.</p>
+        </div>
+        <form id="mobileEditForm" class="detail-block">
+          <input name="id" type="hidden" />
+          <label class="field">
+            Applicant name
+            <input name="customer" required />
+          </label>
+          <label class="field">
+            Mobile
+            <input name="mobile" required />
+          </label>
+          <label class="field">
+            Email
+            <input name="email" type="email" />
+          </label>
+          <label class="field">
+            Product
+            <select name="product">
+              <option>Savings Account</option>
+              <option>Current Account</option>
+              <option>Business Loan</option>
+              <option>Home Loan</option>
+            </select>
+          </label>
+          <label class="field">
+            Customer segment
+            <select name="customerSegment">
+              <option>Personal</option>
+              <option>Business</option>
+            </select>
+          </label>
+          <label class="field">
+            Application type
+            <select name="accountType">
+              <option>Account Opening</option>
+              <option>Loan</option>
+            </select>
+          </label>
+          <label class="field">
+            Stage
+            <select name="stage">
+              <option>Lead Captured</option>
+              <option>Document Collection</option>
+              <option>Verification</option>
+              <option>Approval</option>
+              <option>Disbursement</option>
+              <option>Completed</option>
+            </select>
+          </label>
+          <label class="field">
+            Relationship manager
+            <input name="rm" required />
+          </label>
+          <label class="field">
+            Manager
+            <input name="manager" />
+          </label>
+          <label class="field">
+            Branch
+            <input name="branch" required />
+          </label>
+          <label class="field">
+            Estimated value
+            <input name="value" type="number" required />
+          </label>
+          <label class="field">
+            Customer intent
+            <select name="customerIntent">
+              <option>Hot</option>
+              <option>Warm</option>
+              <option>Cold</option>
+            </select>
+          </label>
+          <div class="quick-actions">
+            <button class="primary-btn" type="submit">Save Changes</button>
+            <button id="editDeleteBtn" class="mini-btn danger-btn" type="button">Delete Applicant</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="screen-tasks" class="screen">
+        <div class="section-head">
+          <h2>Today&apos;s Work</h2>
+          <p>Open follow-ups and document actions.</p>
+        </div>
+        <div id="mobileTaskList" class="mobile-list"></div>
+      </section>
+
+      <section id="screen-insights" class="screen">
+        <div class="section-head">
+          <h2>Control Tower</h2>
+          <p>Revenue leakage, RM productivity, and document rules.</p>
+        </div>
+        <div id="mobileInsights"></div>
+      </section>
+
+      <section id="screen-pitch" class="screen">
+        <button class="text-btn" data-back-home>&lt; Back to applicants</button>
+        <div class="section-head">
+          <h2>Pitch Mode</h2>
+          <p>Focused demo flow for stakeholders.</p>
+        </div>
+        <div id="pitchModeContent"></div>
+      </section>
+
+      <section id="screen-scan" class="screen">
+        <div class="section-head">
+          <h2>Quick Scan</h2>
+          <p>Scan a document and attach it to an applicant.</p>
+        </div>
+        <label class="field">
+          Applicant
+          <select id="mobileScanApp"></select>
+        </label>
+        <label class="field">
+          Expected document
+          <select id="mobileExpectedDoc"></select>
+        </label>
+        <label class="mobile-upload" for="mobileFile">
+          <input id="mobileFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,image/*" capture="environment" multiple />
+          <strong>Use camera or choose file</strong>
+          <span id="mobileFileName">No file selected</span>
+        </label>
+        <label class="field">
+          Visible text
+          <textarea id="mobileDocText" rows="6" placeholder="PAN ABCDE1234F Name Customer DOB 01/01/1980"></textarea>
+        </label>
+        <div class="quick-actions">
+          <button id="samplePanBtn" class="mini-btn" type="button">Use sample PAN</button>
+          <button id="sampleAadhaarBtn" class="mini-btn" type="button">Use sample Aadhaar</button>
+        </div>
+        <div class="quick-actions">
+          <a class="mini-link" href="https://uidai.gov.in/en/" target="_blank" rel="noopener">UIDAI verification</a>
+          <a class="mini-link" href="https://www.incometaxindia.gov.in/" target="_blank" rel="noopener">PAN / Income Tax</a>
+        </div>
+        <div id="mobileDetectedFields" class="mobile-result">Detected fields will appear here automatically.</div>
+        <button id="mobileScanBtn" class="primary-btn">Scan, Verify and Attach</button>
+        <button id="syncOfflineBtn" class="mini-btn" type="button">Sync Offline Queue</button>
+        <div id="mobileScanResult" class="mobile-result">No scan yet.</div>
+      </section>
+
+      <section id="screen-copilot" class="screen">
+        <div class="section-head">
+          <h2>RM Copilot</h2>
+          <p>Ask about risk, missing documents, or who to call.</p>
+        </div>
+        <div id="mobileChatLog" class="chat-log"></div>
+        <form id="mobileChatForm" class="chat-form">
+          <input id="mobileChatInput" type="text" placeholder="Who should I call today?" />
+          <button class="primary-btn" type="submit">Ask</button>
+        </form>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="active" data-screen="home">Home</button>
+      <button data-screen="tasks">Tasks</button>
+      <button data-screen="scan">Scan</button>
+      <button data-screen="insights">Insights</button>
+      <button data-screen="copilot">Copilot</button>
+    </nav>
+
+    <script src="./config.js?v=20260610-netlify"></script>
+    <script src="./mobile.js?v=20260708-alert-correct-ocr"></script>
+  </body>
+</html>

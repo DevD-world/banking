@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Application Completion Intelligence Platform</title>
+    <meta name="theme-color" content="#111b18" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Completion IQ" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">AC</div>
+          <div>
+            <strong>Completion IQ</strong>
+            <span>Banking command system</span>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-item active" data-view="command">Command Center</button>
+          <button class="nav-item" data-view="rm">RM Copilot</button>
+          <button class="nav-item" data-view="followups">Follow-Up Center</button>
+          <button class="nav-item" data-view="scanner">Document Scanner</button>
+          <button class="nav-item" data-view="manager">Manager Tower</button>
+          <button class="nav-item" data-view="analytics">Leakage Analytics</button>
+          <button class="nav-item" data-view="admin">Rules Admin</button>
+          <button class="nav-item" data-view="integrations">Integrations</button>
+          <a class="nav-item nav-link" href="./mobile.html">Mobile App</a>
+        </nav>
+
+        <div class="sidebar-card">
+          <span>Revenue at risk</span>
+          <strong id="sidebarRevenue">Rs. 48.5L</strong>
+          <small>Across active high-risk applications</small>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">AI-powered banking operations</p>
+            <h1 id="pageTitle">Application Command Center</h1>
+          </div>
+          <div class="top-actions">
+            <select id="roleSelect" aria-label="Select role">
+              <option value="rm">Relationship Manager</option>
+              <option value="manager">Branch Manager</option>
+              <option value="admin">Admin</option>
+            </select>
+            <button id="newApplicationBtn" class="primary-btn">+ New Application</button>
+          </div>
+        </header>
+
+        <section class="metrics-grid" id="metricsGrid"></section>
+
+        <section id="view-command" class="view active">
+          <div class="two-column">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Live Applications</h2>
+                  <p>Prioritized by abandonment risk and completion gap.</p>
+                </div>
+                <input id="applicationSearch" type="search" placeholder="Search customer, product, RM..." />
+              </div>
+              <div id="applicationList" class="application-list"></div>
+            </section>
+
+            <section class="panel detail-panel">
+              <div id="applicationDetail"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="view-rm" class="view">
+          <div class="two-column">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Today&apos;s RM Actions</h2>
+                  <p>AI-ranked tasks for applications most likely to stall.</p>
+                </div>
+              </div>
+              <div id="taskList" class="task-list"></div>
+            </section>
+            <section class="panel copilot-panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Inbuilt AI Chatbot</h2>
+                  <p>Ask about risk, missing documents, follow-ups, or revenue leakage.</p>
+                </div>
+              </div>
+              <div id="chatLog" class="chat-log"></div>
+              <form id="chatForm" class="chat-form">
+                <input id="chatInput" type="text" placeholder="Ask: Which customers should I call today?" />
+                <button class="primary-btn" type="submit">Ask</button>
+              </form>
+            </section>
+          </div>
+        </section>
+
+        <section id="view-followups" class="view">
+          <div class="two-column">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Follow-Up Queue</h2>
+                  <p>Open customer touchpoints ranked by due date, priority, and risk.</p>
+                </div>
+                <select id="followupChannelFilter" aria-label="Filter follow-up channel">
+                  <option value="all">All channels</option>
+                  <option value="Call">Call</option>
+                  <option value="WhatsApp">WhatsApp</option>
+                  <option value="SMS">SMS</option>
+                  <option value="Email">Email</option>
+                  <option value="Document">Document</option>
+                </select>
+              </div>
+              <div id="followupQueue" class="task-list"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Message Composer</h2>
+                  <p>Generate customer-ready follow-ups using missing document and stage data.</p>
+                </div>
+              </div>
+              <label class="field">
+                Application
+                <select id="composerApplication"></select>
+              </label>
+              <label class="field">
+                Channel
+                <select id="composerChannel">
+                  <option>WhatsApp</option>
+                  <option>SMS</option>
+                  <option>Email</option>
+                  <option>Call</option>
+                </select>
+              </label>
+              <button id="composeBtn" class="primary-btn wide">Generate Follow-Up</button>
+              <div id="composerOutput" class="scan-result empty-state">Select an application and generate a follow-up.</div>
+            </section>
+          </div>
+        </section>
+
+        <section id="view-scanner" class="view">
+          <div class="two-column scanner-layout">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>AI Document Scanner</h2>
+                  <p>Upload or paste visible text. The demo engine classifies, extracts, and attaches documents.</p>
+                </div>
+              </div>
+              <label class="field">
+                Application
+                <select id="scannerApplication"></select>
+              </label>
+              <label class="upload-zone" for="documentFile">
+                <input id="documentFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,image/*" capture="environment" />
+                <strong>Drop or choose a document</strong>
+                <span>Try names like gst-certificate.pdf, pan-card.jpg, aadhaar.png, bank-statement.pdf</span>
+                <small id="selectedFileName">No file selected</small>
+              </label>
+              <label class="field">
+                Detected / pasted text
+                <textarea id="documentText" rows="8" placeholder="Paste document text here for stronger extraction..."></textarea>
+              </label>
+              <button id="scanBtn" class="primary-btn wide">Scan and Attach</button>
+            </section>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Scan Result</h2>
+                  <p>Document classification and validation output.</p>
+                </div>
+              </div>
+              <div id="scanResult" class="scan-result empty-state">No document scanned yet.</div>
+            </section>
+          </div>
+        </section>
+
+        <section id="view-manager" class="view">
+          <div class="three-column">
+            <section class="panel">
+              <h2>At-Risk Applications</h2>
+              <div id="riskList" class="compact-list"></div>
+            </section>
+            <section class="panel">
+              <h2>RM Workload</h2>
+              <div id="workloadList" class="compact-list"></div>
+            </section>
+            <section class="panel">
+              <h2>Branch Bottlenecks</h2>
+              <div id="bottleneckList" class="compact-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="view-analytics" class="view">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Revenue Leakage Engine</h2>
+                <p>Root-cause intelligence from abandoned and high-risk applications.</p>
+              </div>
+            </div>
+            <div id="analyticsGrid" class="analytics-grid"></div>
+          </div>
+        </section>
+
+        <section id="view-admin" class="view">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Product Document Rules</h2>
+                <p>Document requirements used by the tracking and scoring engines.</p>
+              </div>
+              <button id="resetDemoBtn" class="ghost-btn">Reset demo data</button>
+            </div>
+            <div id="rulesTable" class="rules-table"></div>
+          </div>
+        </section>
+
+        <section id="view-integrations" class="view">
+          <div class="two-column">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Integration Readiness</h2>
+                  <p>Switch demo connectors on/off to show the V2 architecture path.</p>
+                </div>
+              </div>
+              <div id="integrationList" class="compact-list"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Implementation Blueprint</h2>
+                  <p>Production services needed when this MVP is connected to real bank systems.</p>
+                </div>
+              </div>
+              <div id="blueprintList" class="compact-list"></div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="applicationModal" class="modal" aria-hidden="true">
+      <form id="applicationForm" class="modal-card">
+        <div class="modal-head">
+          <h2>New Application</h2>
+          <button type="button" id="closeModalBtn" class="icon-btn" aria-label="Close">x</button>
+        </div>
+        <div class="form-grid">
+          <label class="field">Customer name<input name="customer" required /></label>
+          <label class="field">Mobile<input name="mobile" required value="+91 90000 00000" /></label>
+          <label class="field">Email<input name="email" type="email" required value="customer@example.com" /></label>
+          <label class="field">Product
+            <select name="product">
+              <option>Business Loan</option>
+              <option>Savings Account</option>
+              <option>Current Account</option>
+              <option>Home Loan</option>
+            </select>
+          </label>
+          <label class="field">Relationship manager<input name="rm" required value="Asha Nair" /></label>
+          <label class="field">Manager<input name="manager" required value="Prakash Menon" /></label>
+          <label class="field">Branch<input name="branch" required value="Chennai Central" /></label>
+          <label class="field">Lead source
+            <select name="source">
+              <option>Branch walk-in</option>
+              <option>Digital lead</option>
+              <option>Campaign</option>
+              <option>RM referral</option>
+              <option>Existing customer</option>
+            </select>
+          </label>
+          <label class="field">Customer intent
+            <select name="customerIntent">
+              <option>Hot</option>
+              <option selected>Warm</option>
+              <option>Cold</option>
+            </select>
+          </label>
+          <label class="field">Estimated value<input name="value" type="number" required value="750000" /></label>
+          <label class="field">Current stage
+            <select name="stage">
+              <option>Document Collection</option>
+              <option>Verification</option>
+              <option>Approval</option>
+              <option>Customer Follow-up</option>
+            </select>
+          </label>
+        </div>
+        <button class="primary-btn wide" type="submit">Create Application</button>
+      </form>
+    </div>
+
+    <div id="applicantUploadModal" class="modal" aria-hidden="true">
+      <form id="applicantUploadForm" class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>Upload Applicant Document</h2>
+            <p id="applicantUploadContext">Scan and verify applicant document.</p>
+          </div>
+          <button type="button" id="closeApplicantUploadBtn" class="icon-btn" aria-label="Close">x</button>
+        </div>
+        <input type="hidden" id="uploadAppId" />
+        <input type="hidden" id="uploadExpectedDoc" />
+        <label class="upload-zone" for="applicantDocumentFile">
+          <input id="applicantDocumentFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.txt,image/*" capture="environment" />
+          <strong>Choose applicant document</strong>
+          <span>For PAN/Aadhaar, filename plus pasted text can auto-fill identity fields.</span>
+          <small id="applicantSelectedFileName">No file selected</small>
+        </label>
+        <label class="field">
+          Visible document text
+          <textarea id="applicantDocumentText" rows="7" placeholder="Example: PAN ABCDE1234F Name Ramesh Textiles DOB 01/01/1980"></textarea>
+        </label>
+        <button class="primary-btn wide" type="submit">Scan, Verify and Attach</button>
+        <div id="applicantUploadResult" class="scan-result empty-state">No upload scanned yet.</div>
+      </form>
+    </div>
+
+    <script src="./config.js?v=20260610-netlify"></script>
+    <script src="./app.js?v=20260610-netlify"></script>
+  </body>
+</html>

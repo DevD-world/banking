@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open Banker Support Mobile App</title>
+    <link rel="stylesheet" href="./mobile.css" />
+    <style>
+      .qr-wrap { text-align:center; }
+      .qr-wrap img { width:min(78vw, 360px); height:auto; border:1px solid #dfe4df; border-radius:8px; padding:12px; background:#fff; }
+      .copy-line { word-break:break-all; font-size:13px; color:#5f6a64; }
+    </style>
+  </head>
+  <body>
+    <main class="mobile-app">
+      <header class="mobile-header">
+        <div>
+          <span class="eyebrow">Banker Support</span>
+          <h1>Scan To Open App</h1>
+        </div>
+        <span class="status-pill">Ready</span>
+      </header>
+
+      <section class="detail-block qr-wrap">
+        <h2>Mobile App QR</h2>
+        <p>Scan this QR from your phone camera to open the banker support app directly.</p>
+        <img src="./banker-support-mobile-qr.png" alt="QR code to open Banker Support mobile app" />
+        <p class="copy-line">
+          http://192.168.29.122:8000/mobile.html?v=20260708-alert-correct-ocr
+        </p>
+        <a class="primary-btn" href="http://192.168.29.122:8000/mobile.html?v=20260708-alert-correct-ocr">Open App</a>
+      </section>
+
+      <section class="detail-block">
+        <h2>Phone Checklist</h2>
+        <p>Keep your phone on the same Wi-Fi network as this laptop. If it does not open, allow Python/backend through Windows Firewall.</p>
+      </section>
+    </main>
+  </body>
+</html>
