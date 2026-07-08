@@ -2,7 +2,7 @@ services:
   - type: web
     name: banking
     env: python
-    plan: starter
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: python backend/server.py
     envVars:
@@ -12,7 +12,3 @@ services:
         value: /var/data
       - key: COMPLETION_IQ_ALLOWED_ORIGIN
         value: "*"
-    disk:
-      name: banking-data
-      mountPath: /var/data
-      sizeGB: 1
